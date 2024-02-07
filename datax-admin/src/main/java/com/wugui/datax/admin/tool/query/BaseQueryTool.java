@@ -466,6 +466,30 @@ public abstract class BaseQueryTool implements QueryToolInterface {
         return maxVal;
     }
 
+    @Override
+    public String getMaxVal(String tableName, String columnKey) {
+        Statement stmt = null;
+        ResultSet rs = null;
+        String maxVal = "";
+        try {
+            stmt = connection.createStatement();
+            //获取sql
+            String sql = getSQLMaxID(tableName, columnKey);
+            rs = stmt.executeQuery(sql);
+            rs.next();
+            maxVal = rs.getString(1);
+        } catch (SQLException e) {
+            logger.error("[getMaxIdVal Exception] --> "
+                    + "the exception message is:" + e.getMessage());
+        } finally {
+            JdbcUtils.close(rs);
+            JdbcUtils.close(stmt);
+        }
+
+
+        return maxVal;
+    }
+
     private String getSQLMaxID(String tableName, String primaryKey) {
         return sqlBuilder.getMaxId(tableName, primaryKey);
     }

@@ -84,4 +84,12 @@ public interface QueryToolInterface {
      */
     long getMaxIdVal(String tableName,String primaryKey);
 
+    /**
+     * 获取最大值
+     * @param tableName
+     * @param columnKey
+     * @return
+     */
+    String getMaxVal(String tableName,String columnKey);
+
 }

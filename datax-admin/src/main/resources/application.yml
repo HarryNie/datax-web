@@ -1,16 +1,16 @@
 server:
   #port: 8080
-  port: ${server.port}
+  port: ${server.port:8080}
 spring:
   #数据源
   datasource:
     #    username: root
     #password: root
     #url: jdbc:mysql://localhost:3306/datax_web?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
-    password: ${DB_PASSWORD:password}
-    username: ${DB_USERNAME:username}
-    url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/${DB_DATABASE:dataxweb}?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
-    driver-class-name: com.mysql.jdbc.Driver
+    password: ${DB_PASSWORD:123456}
+    username: ${DB_USERNAME:root}
+    url: jdbc:mysql://${DB_HOST:124.71.144.8}:${DB_PORT:3306}/${DB_DATABASE:datax_web}?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&useSSL=false&nullNamePatternMatchesAll=true&useUnicode=true&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
 
     hikari:
@@ -28,12 +28,13 @@ spring:
 
   # datax-web email
   mail:
-    host: smtp.qq.com
+    #    host: smtp.qq.com
+    host: ${mail.host:smtp.163.com}
     port: 25
     #username: xxx@qq.com
     #password: xxx
-    username: ${mail.username}
-    password: ${mail.password}
+    username: ${mail.username:nh19911@163.com}
+    password: ${mail.password:IHWDRHDWNQEGYUBK}
     properties:
       mail:
         smtp:
@@ -85,7 +86,7 @@ mybatis-plus:
 logging:
   #level:
   #  com.wugui.datax.admin.mapper: info
-#path: ./data/applogs/admin
+  #path: ./data/applogs/admin
   level:
     com.wugui.datax.admin.mapper: error
     path: ${data.path}/applogs/admin

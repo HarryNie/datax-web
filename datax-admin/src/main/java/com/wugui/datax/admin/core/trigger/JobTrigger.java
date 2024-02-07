@@ -1,5 +1,6 @@
 package com.wugui.datax.admin.core.trigger;
 
+import cn.hutool.core.date.DateUtil;
 import com.wugui.datatx.core.biz.ExecutorBiz;
 import com.wugui.datatx.core.biz.model.ReturnT;
 import com.wugui.datatx.core.biz.model.TriggerParam;
@@ -22,6 +23,7 @@ import com.wugui.datax.rpc.util.ThrowableUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.ObjectUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -151,7 +153,9 @@ public class JobTrigger {
                 triggerParam.setEndId(maxId);
                 triggerParam.setStartId(jobInfo.getIncStartId());
             } else if (IncrementTypeEnum.TIME.getCode() == incrementType) {
-                triggerParam.setStartTime(jobInfo.getIncStartTime());
+                String maxVal = getMaxVal(jobInfo);
+
+                triggerParam.setStartTime(ObjectUtils.isEmpty(maxVal)?jobInfo.getIncStartTime(): DateUtil.parseDateTime(maxVal));
                 triggerParam.setTriggerTime(triggerTime);
                 triggerParam.setReplaceParamType(jobInfo.getReplaceParamType());
             } else if (IncrementTypeEnum.PARTITION.getCode() == incrementType) {
@@ -225,6 +229,12 @@ public class JobTrigger {
         JobDatasource datasource = JobAdminConfig.getAdminConfig().getJobDatasourceMapper().selectById(jobInfo.getDatasourceId());
         BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
         return qTool.getMaxIdVal(jobInfo.getReaderTable(), jobInfo.getPrimaryKey());
+    }
+
+    private static String getMaxVal(JobInfo jobInfo) {
+        JobDatasource datasource = JobAdminConfig.getAdminConfig().getJobDatasourceMapper().selectById(jobInfo.getDatasourceId());
+        BaseQueryTool qTool = QueryToolFactory.getByDbType(datasource);
+        return qTool.getMaxVal(jobInfo.getReaderTable(), jobInfo.getPrimaryKey());
     }
 
     /**
